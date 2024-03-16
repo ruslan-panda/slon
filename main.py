@@ -23,7 +23,6 @@ def main():
     logging.info(f'Response:  {response!r}')
     return jsonify(response)
 
-
 def handle_dialog(req, res):
     user_id = req['session']['user_id']
 
