@@ -19,6 +19,7 @@ def main():
         }
     }
     handle_dialog(request.json, response)
+    handle_dialog_crol(request.json, response)
     logging.info(f'Response:  {response!r}')
     return jsonify(response)
 
@@ -44,11 +45,41 @@ def handle_dialog(req, res):
     ]
     if any(i in req['request']['original_utterance'].lower() for i in test):
         res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
-        res['response']['end_session'] = True
+
         return
 
     res['response']['text'] = \
         f"Все говорят '{req['request']['original_utterance']}', а ты купи слона!"
+    res['response']['buttons'] = get_suggests(user_id)
+
+
+def handle_dialog_crol(req, res):
+    user_id = req['session']['user_id']
+
+    if req['session']['new']:
+        sessionStorage[user_id] = {
+            'suggests': [
+                "Не хочу.",
+                "Не буду.",
+                "Отстань!",
+            ]
+        }
+        res['response']['text'] = 'Привет! Купи кролика!'
+        res['response']['buttons'] = get_suggests(user_id)
+        return
+    test = [
+        'ладно',
+        'куплю',
+        'покупаю',
+        'хорошо'
+    ]
+    if any(i in req['request']['original_utterance'].lower() for i in test):
+        res['response']['text'] = 'Кролика можно найти на Яндекс.Маркете!'
+        res['response']['end_session'] = True
+        return
+
+    res['response']['text'] = \
+        f"Все говорят '{req['request']['original_utterance']}', а ты купи кролика!"
     res['response']['buttons'] = get_suggests(user_id)
 
 
