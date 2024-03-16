@@ -19,7 +19,6 @@ def main():
         }
     }
     handle_dialog(request.json, response)
-    handle_dialog_crol(request.json, response)
     logging.info(f'Response:  {response!r}')
     return jsonify(response)
 
@@ -45,7 +44,14 @@ def handle_dialog(req, res):
     ]
     if any(i in req['request']['original_utterance'].lower() for i in test):
         res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
-
+        response = {
+            'session': request.json['session'],
+            'version': request.json['version'],
+            'response': {
+                'end_session': False
+            }
+        }
+        handle_dialog_crol(request.json, response)
         return
 
     res['response']['text'] = \
