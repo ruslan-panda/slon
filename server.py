@@ -75,9 +75,8 @@ def handle_dialog(res, req):
             elif 'нет' in req['request']['nlu']['tokens']:
                 res['response']['text'] = 'Ну и ладно!'
                 res['end_session'] = True
-            elif "Помощь" in req['request']['nlu']['tokens']:
-                res['response'][
-                    'text'] = 'Сейчас я буду показывать тебе картинки городов, а ты должен будешь угадать город который я тебе показываю'
+            elif req['request']['original_utterance'].lower() == 'помощь':
+                res['response']['text'] = 'Сейчас я буду показывать тебе картинки городов, а ты должен будешь угадать город который я тебе показываю'
             else:
                 res['response']['text'] = 'Не поняла ответа! Так да или нет?'
                 res['response']['buttons'] = [
