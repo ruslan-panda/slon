@@ -56,6 +56,10 @@ def handle_dialog(res, req):
                 {
                     'title': 'Нет',
                     'hide': True
+                },
+                {
+                    'title': 'Помощь',
+                    'hide': True
                 }
             ]
     else:
@@ -71,6 +75,8 @@ def handle_dialog(res, req):
             elif 'нет' in req['request']['nlu']['tokens']:
                 res['response']['text'] = 'Ну и ладно!'
                 res['end_session'] = True
+            elif 'помощь' in req['request']['nlu']['tokens']:
+                res['response']['text'] = 'Сейчас я буду показывать тебе картинки городов, а ты должен будешь угадать город который я тебе показываю'
             else:
                 res['response']['text'] = 'Не поняла ответа! Так да или нет?'
                 res['response']['buttons'] = [
@@ -81,8 +87,15 @@ def handle_dialog(res, req):
                     {
                         'title': 'Нет',
                         'hide': True
+                    },
+                    {
+                        'title': 'Помощь',
+                        'hide': True
                     }
                 ]
+        elif 'помощь' in req['request']['nlu']['tokens']:
+            res['response'][
+                'text'] = 'Сейчас я буду показывать тебе картинки городов, а ты должен будешь угадать город который я тебе показываю'
         else:
             play_game(res, req)
 
@@ -119,6 +132,12 @@ def play_game(res, req):
                 res['response']['card']['title'] = 'Неправильно. Вот тебе дополнительное фото'
                 res['response']['card']['image_id'] = cities[city][attempt - 1]
                 res['response']['text'] = 'А вот и не угадал!'
+                res['response']['buttons'] = [
+                    {
+                        'title': 'Помощь',
+                        'hide': True
+                    }
+                ]
     sessionStorage[user_id]['attempt'] += 1
 
 
